@@ -1,2 +1,3 @@
 selenium-driverless==0.1.16
+browser-use
 asyncio

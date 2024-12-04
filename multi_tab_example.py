@@ -1,51 +1,35 @@
+from browser_use import Browser, BrowserConfig
 from selenium_driverless import webdriver
-from selenium_driverless.types.by import By
 import asyncio
 
-async def setup_browser(wss_url):
-    # Configure browser with custom WSS URL
-    browser_config = webdriver.BrowserConfig(
-        wss_url=wss_url
-    )
-    options = webdriver.ChromeOptions()
-    return await webdriver.Chrome(options=options, config=browser_config)
-
-async def handle_tab(driver, url):
-    await driver.get(url, wait_load=True)
-    await driver.wait_for_cdp('Page.domContentEventFired', timeout=15)
-    return await driver.title
-
 async def main():
-    # Replace with your browserless/anty instance URL
-    wss_url = 'ws://localhost:3000'
-    
-    async with await setup_browser(wss_url) as driver:
-        # Create multiple tabs
-        tab1 = driver.current_window_handle
-        await driver.new_window('tab')
-        tab2 = driver.current_window_handle
-        await driver.new_window('tab')
-        tab3 = driver.current_window_handle
+    # Configure browser-use to connect to selenium-driverless instance
+    browser = Browser(
+        config=BrowserConfig(
+            wss_url='ws://localhost:3000'  # Replace with your API URL
+        )
+    )
 
-        # List of URLs to visit
-        urls = [
-            'https://example.com',
-            'https://google.com',
-            'https://github.com'
-        ]
+    # Start browser and create new tabs
+    async with browser:
+        # Open first tab
+        tab1 = await browser.new_tab()
+        await tab1.goto('https://example.com')
 
-        # Handle each tab concurrently
-        tasks = []
-        for tab, url in zip([tab1, tab2, tab3], urls):
-            await driver.switch_to.window(tab)
-            tasks.append(handle_tab(driver, url))
+        # Open second tab
+        tab2 = await browser.new_tab()
+        await tab2.goto('https://google.com')
 
-        # Wait for all tabs to complete
-        results = await asyncio.gather(*tasks)
-        
-        # Print results
-        for i, title in enumerate(results, 1):
-            print(f'Tab {i} title: {title}')
+        # Switch between tabs and perform operations
+        await tab1.bring_to_front()
+        print(f'Tab 1 title: {await tab1.title()}')
+
+        await tab2.bring_to_front()
+        print(f'Tab 2 title: {await tab2.title()}')
+
+        # Close tabs
+        await tab1.close()
+        await tab2.close()
 
 if __name__ == '__main__':
     asyncio.run(main())

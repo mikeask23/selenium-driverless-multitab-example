@@ -1,41 +1,30 @@
-# Selenium Driverless Multi-Tab Example
+# Browser-Use Multi-Tab Example with Selenium-Driverless
 
-This repository demonstrates how to use selenium-driverless for handling multiple tabs while connecting to a custom browser instance (such as browserless or anty).
+This example demonstrates how to use browser-use's multi-tab functionality with selenium-driverless as the browser backend, connecting via WSS URL.
 
-## Features
+## Requirements
 
-- Custom browser instance connection using WSS URL
-- Multi-tab handling
-- Asynchronous operation
-- Cloudflare bypass capability
+- Python 3.8+
+- Google Chrome installed
+- selenium-driverless 0.1.16
+- browser-use
 
 ## Installation
 
-1. Install the requirements:
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Make sure you have Google Chrome installed
-
 ## Usage
 
-1. Update the `wss_url` in `multi_tab_example.py` to point to your browser instance
+1. Update the `wss_url` in the script to point to your selenium-driverless instance
 2. Run the example:
 ```bash
 python multi_tab_example.py
 ```
 
-## Configuration
-
-The example demonstrates:
-- Connecting to a custom browser instance
-- Creating and managing multiple tabs
-- Concurrent tab operations
-- Proper resource cleanup
-
 ## Notes
 
-- This example uses selenium-driverless 0.1.16
-- Requires Python 3.8 or higher
-- Compatible with browserless, anty, and similar services
+- This example uses browser-use's tab management capabilities
+- Connects to a selenium-driverless instance via WSS URL
+- Demonstrates basic multi-tab operations
